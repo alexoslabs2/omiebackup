@@ -1,0 +1,13 @@
+.env
+.env.local
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+logs/
+backups/
+dist/
+*.tar.gz
+*.sha256

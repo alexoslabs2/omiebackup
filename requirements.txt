@@ -1,0 +1,4 @@
+requests
+tenacity
+python-dotenv
+boto3
