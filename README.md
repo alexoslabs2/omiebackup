@@ -47,11 +47,10 @@ backups/client_a_2026-06-17.tar.gz
 backups/client_b_2026-06-17.tar.gz
 ```
 
-Se `OMIE_PROFILES` nao estiver definido, o modo antigo com `OMIE_APP_KEY` e
-`OMIE_APP_SECRET` continua funcionando.
+Se `OMIE_PROFILES` nao estiver definido, o script utilizará as informações presentes nas váriaveis
 
-## Testes
-
-```bash
-pytest tests/ -v
+```text
+OMIE_APP_KEY=
+OMIE_APP_SECRET=
+OMIE_PROFILE_NAME=
 ```
