@@ -47,7 +47,7 @@ backups/client_a_2026-06-17.tar.gz
 backups/client_b_2026-06-17.tar.gz
 ```
 
-Se `OMIE_PROFILES` nao estiver definido, o script utilizará as informações presentes nas váriaveis
+Se `OMIE_PROFILES` nao estiver definido, o script utilizará as informações presentes nas variáveis
 
 ```text
 OMIE_APP_KEY=
