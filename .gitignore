@@ -11,3 +11,4 @@ backups/
 dist/
 *.tar.gz
 *.sha256
+AGENTS.md
