@@ -42,13 +42,17 @@ class EmailNotifier:
         message.attach(MIMEText(text_body, "plain", "utf-8"))
         message.attach(MIMEText(html_body, "html", "utf-8"))
 
-        if self.settings.smtp_tls:
+        if self.settings.smtp_security == "starttls":
             with smtplib.SMTP(self.settings.smtp_host, self.settings.smtp_port) as smtp:
                 smtp.starttls()
                 self._login(smtp)
                 smtp.sendmail(self.settings.smtp_from, self.settings.smtp_to, message.as_string())
-        else:
+        elif self.settings.smtp_security == "ssl":
             with smtplib.SMTP_SSL(self.settings.smtp_host, self.settings.smtp_port) as smtp:
+                self._login(smtp)
+                smtp.sendmail(self.settings.smtp_from, self.settings.smtp_to, message.as_string())
+        else:
+            with smtplib.SMTP(self.settings.smtp_host, self.settings.smtp_port) as smtp:
                 self._login(smtp)
                 smtp.sendmail(self.settings.smtp_from, self.settings.smtp_to, message.as_string())
 

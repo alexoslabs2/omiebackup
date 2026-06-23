@@ -14,6 +14,7 @@ OMIE_BASE_URL = "https://app.omie.com.br/api/v1"
 
 BackupMode = Literal["full", "incremental"]
 ResultStatus = Literal["ok", "warning", "error"]
+SmtpSecurity = Literal["starttls", "ssl", "none"]
 
 
 @dataclass(frozen=True)
@@ -62,6 +63,7 @@ class Settings:
     alert_max_duration_hours: float
     smtp_host: str | None
     smtp_port: int
+    smtp_security: SmtpSecurity
     smtp_tls: bool
     smtp_username: str | None
     smtp_password: str | None
@@ -121,6 +123,7 @@ def load_settings() -> Settings:
         alert_max_duration_hours=_float_env("ALERT_MAX_DURATION_HOURS", 4.0),
         smtp_host=_optional_str(os.getenv("SMTP_HOST")),
         smtp_port=_int_env("SMTP_PORT", 587),
+        smtp_security=_smtp_security(),
         smtp_tls=_bool_env("SMTP_TLS", True),
         smtp_username=_optional_str(os.getenv("SMTP_USERNAME")),
         smtp_password=_optional_str(os.getenv("SMTP_PASSWORD")),
@@ -230,6 +233,16 @@ def _bool_env(name: str, default: bool) -> bool:
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "y", "s", "sim"}
+
+
+def _smtp_security() -> SmtpSecurity:
+    value = _optional_str(os.getenv("SMTP_SECURITY"))
+    if value:
+        normalized = value.lower()
+        if normalized in {"starttls", "ssl", "none"}:
+            return normalized  # type: ignore[return-value]
+        raise ValueError("SMTP_SECURITY must be starttls, ssl, or none")
+    return "starttls" if _bool_env("SMTP_TLS", True) else "ssl"
 
 
 def _int_env(name: str, default: int) -> int:

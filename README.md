@@ -54,3 +54,26 @@ OMIE_APP_KEY=
 OMIE_APP_SECRET=
 OMIE_PROFILE_NAME=
 ```
+
+## SMTP
+
+O envio de resumo aceita tres modos de seguranca em `SMTP_SECURITY`:
+
+```env
+SMTP_SECURITY=starttls  # SMTP + STARTTLS, normalmente porta 587
+SMTP_SECURITY=ssl       # SSL implicito, normalmente porta 465
+SMTP_SECURITY=none      # SMTP sem TLS/SSL, comum em relay interno na porta 25
+```
+
+Para relay interno liberado por whitelist de IP, sem SSL e sem autenticacao:
+
+```env
+SMTP_HOST=smtp.interno
+SMTP_PORT=25
+SMTP_SECURITY=none
+SMTP_USERNAME=
+SMTP_PASSWORD=
+```
+
+Se `SMTP_SECURITY` nao estiver definido, o comportamento legado de `SMTP_TLS`
+continua sendo respeitado.

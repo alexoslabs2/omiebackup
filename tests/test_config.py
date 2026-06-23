@@ -48,6 +48,41 @@ def test_load_settings_reads_required_values(monkeypatch, tmp_path) -> None:
     assert settings.omie_profiles[0].name is None
 
 
+def test_load_settings_supports_plain_smtp_security(monkeypatch, tmp_path) -> None:
+    """SMTP_SECURITY=none enables plain SMTP for IP-whitelisted relays."""
+
+    _disable_dotenv(monkeypatch)
+    monkeypatch.setenv("OMIE_APP_KEY", "key")
+    monkeypatch.setenv("OMIE_APP_SECRET", "secret")
+    monkeypatch.setenv("BACKUP_MODE", "full")
+    monkeypatch.setenv("STORAGE_TYPE", "local")
+    monkeypatch.setenv("STORAGE_LOCAL_PATH", str(tmp_path))
+    monkeypatch.setenv("SMTP_SECURITY", "none")
+    monkeypatch.setenv("SMTP_TLS", "true")
+
+    settings = load_settings()
+
+    assert settings.smtp_security == "none"
+    assert settings.smtp_tls is True
+
+
+def test_load_settings_keeps_legacy_smtp_tls_false_as_ssl(monkeypatch, tmp_path) -> None:
+    """Without SMTP_SECURITY, SMTP_TLS=false keeps the old SMTP_SSL behavior."""
+
+    _disable_dotenv(monkeypatch)
+    monkeypatch.setenv("OMIE_APP_KEY", "key")
+    monkeypatch.setenv("OMIE_APP_SECRET", "secret")
+    monkeypatch.setenv("BACKUP_MODE", "full")
+    monkeypatch.setenv("STORAGE_TYPE", "local")
+    monkeypatch.setenv("STORAGE_LOCAL_PATH", str(tmp_path))
+    monkeypatch.delenv("SMTP_SECURITY", raising=False)
+    monkeypatch.setenv("SMTP_TLS", "false")
+
+    settings = load_settings()
+
+    assert settings.smtp_security == "ssl"
+
+
 def test_load_settings_reads_named_omie_profiles(monkeypatch, tmp_path) -> None:
     """Multiple named OMIE credential profiles are loaded from prefixed variables."""
 

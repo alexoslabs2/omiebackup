@@ -59,6 +59,7 @@ def _settings(output_dir) -> Settings:
         alert_max_duration_hours=4,
         smtp_host=None,
         smtp_port=587,
+        smtp_security="starttls",
         smtp_tls=True,
         smtp_username=None,
         smtp_password=None,
